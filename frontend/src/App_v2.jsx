@@ -5,15 +5,13 @@ import axios from 'axios';
 import {Component} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import BookList from './components/lms/BookList';
-import UserList from './components/lms/UserList';
-import AddBook from './components/lms/AddBook';
-import AddUser from './components/lms/AddUser';
-import UpdateBook from './components/lms/UpdateBook';
-import SearchBook from './components/lms/SearchBook';
-import SearchUser from './components/lms/SearchUser';
-import Login from './components/lms/Login';
-import Register from './components/lms/Register';
+import BookList from './components/BookList';
+import UserList from './components/UserList';
+import AddBook from './components/AddBook';
+import AddUser from './components/AddUser';
+import UpdateBook from './components/UpdateBook';
+import SearchBook from './components/SearchBook';
+import SearchUser from './components/SearchUser';
 
 function App() {
   const [error, setError] = useState('');  
@@ -31,7 +29,6 @@ function App() {
   // const [showUpdateBookSection, setShowUpdateBookSection] = useState(false);
   const [showSearchBookSection, setShowSearchBookSection] = useState(false);
   //------------------------------------------------------------------------
-  const [isRegistering, setIsRegistering] = useState(true);  
 
   useEffect(() => {
     axios.get('http://localhost:9000/api/books')
@@ -66,35 +63,11 @@ function App() {
   };
 
   //------------------------------------------------------------------------
-  const toggleForm = () => {
-    setIsRegistering(!isRegistering); // Toggle the form between Register and Login
-  };
-  //------------------------------------------------------------------------
   return (
     <Router>
-
-    <div >
-      <h1>Library Management System</h1>  
-        <div className="form-toggle-buttons">
-          <button
-            className={`toggle-button ${isRegistering ? 'active' : ''}`}
-            onClick={toggleForm}
-          >
-            Register
-
-          </button>
-          <button
-            className={`toggle-button ${!isRegistering ? 'active' : ''}`}
-            onClick={toggleForm}
-          >
-            Login
-          </button>
-        </div>
-
-        <div className="form-container">
-          {isRegistering ? <Register /> : <Login />}
-        </div>      
-
+    <div>
+      <h1>Library Management System</h1>
+      
       {/* --------------------USERS---------------------------------------------------- */}
       <button onClick={() => setShowAddUserSection(!showAddUserSection)}>
         {showAddUserSection ? 'Hide Add User' : 'Add a New User'}
@@ -133,27 +106,25 @@ function App() {
 
       <p>{error && <span style={{ color: 'red' }}>{error}</span>}</p>
 
-      {/* display all book*/}
-      {/* {!searchedBook && !showSearchBookSection && !showAddBookSection && (
+      {!searchedBook && !showSearchBookSection && !showAddBookSection && (
         <BookList books={books} setBooks={setBooks} />
-      )} */}
+      )}
 
-      {/* display search result */}
       {searchedBook && !showAddBookSection && (
         // <BookList books={[searchedBook]} setBooks={setBooks} handleDeleteBook={handleAllBook} />
         <BookList books={[searchedBook]} setBooks={setBooks} />
       )}
 
+      {/* <Routes>
+        <Route path="/" element={<BookList books={books} setBooks={setBooks} />} />
+        <Route path="/components/:id" element={<UpdateBook />} />   
+      </Routes> */}
+
       {/* ------------------------------------------------------------------------ */}
 
 
     </div>
-      <Routes>
-        {/* {!searchedBook || !showSearchBookSection || !showAddBookSection ||  */}
-          <Route path="/" element={<BookList books={books} setBooks={setBooks} />} />  
-        {/* } */}
-        {/* <Route path="/update-book/:id" element={<UpdateBook />} /> */}
-      </Routes>
+    
     </Router>
   );
 }

@@ -9,8 +9,8 @@
 }
 
 .App h1 {
-  text-align: center; 
-  margin-top: 20px;    
+  text-align: center; /* Aligns the text in the center */
+  margin-top: 20px;    /* Optional: Adds some space from the top */
 }
 
 .form-toggle-buttons {
@@ -84,19 +84,4 @@ button:hover {
   background-color: #0056b3;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-div {
-  text-align: center;
-  width: 100%;
-  max-width: 500px; /* Optional: limit the maximum width of the container */
-  padding: 20px;
-  box-sizing: border-box;
-}
 
