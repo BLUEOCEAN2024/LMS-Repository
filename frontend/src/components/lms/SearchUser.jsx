@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function SearchUser({ setSearchedUser }) {
+// function SearchUser({ setSearchedUser }) {
+function SearchUser({ setUsers }) {
   const [name, setName] = useState('');
 
   const handleSearchUser = () => {
     if (!name) {
-      setSearchedUser(null);
+      setUsers(null);
       return;
     }
-    axios.get(`http://localhost:9000/api/user/getUserByName/${name}`)
-      .then(response => setSearchedUser(response.data))
+    console.log(name);
+    axios.get(`http://localhost:9000/api/users/getUserByName/${name}`)
+      .then(response => setUsers(response.data))
       .catch(error => console.error('Error fetching user:', error));
   };
 

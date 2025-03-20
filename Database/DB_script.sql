@@ -36,7 +36,7 @@ VALUES
 ;
 commit;
 
-select * from tbl_users;
+select * from tbl_users where pwd='karen';
 -- truncate table tbl_users;
 
 -- Table: Books

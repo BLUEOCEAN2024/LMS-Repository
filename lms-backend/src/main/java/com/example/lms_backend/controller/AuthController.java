@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.lms_backend.model.User;
 //import com.example.lms_backend.model.User;
 import com.example.lms_backend.service.UserService;
 
@@ -41,15 +42,21 @@ public class AuthController {
 //        }
 //    }
 
+//    @GetMapping("/login")
+//    public ResponseEntity<?> login(@RequestParam String name, @RequestParam String password) {
+//      boolean existingUser = userService.login(name,password);
+//      if (existingUser) {
+//    	  return new ResponseEntity<>("User login successfully!", HttpStatus.OK);
+//      }  
+//      else {      
+//    	  return new ResponseEntity<>("Error user logging in", HttpStatus.BAD_REQUEST);
+//      }
+//  }
+    
     @GetMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String name, @RequestParam String password) {
-      boolean existingUser = userService.login(name,password);
-      if (existingUser) {
-    	  return new ResponseEntity<>("User login successfully!", HttpStatus.OK);
-      }  
-      else {      
-    	  return new ResponseEntity<>("Error user logging in", HttpStatus.BAD_REQUEST);
-      }
+    public User login(@RequestParam String name, @RequestParam String password) {
+     return userService.login(name,password);
+
   }
 
 //  @PostMapping("/login")

@@ -60,16 +60,15 @@ public class UserService {
     }
     
     
-    public boolean login(String name, String password) {
+    public User login(String name, String password) {
         Optional<User> existingUser = userRepository.findByName(name);
         if (existingUser.isPresent()) {
         	User user = existingUser.get();
-//        	if ("karen".equals(user.getPwd())) {
             if (password.equals(user.getPwd())) {
-        		return true;
+        		return user;
         	}
         };
-		return false;
+		return null;
     }
     
     public boolean doesUserExist(String name) {

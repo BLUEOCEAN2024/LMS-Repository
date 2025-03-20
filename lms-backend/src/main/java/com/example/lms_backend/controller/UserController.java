@@ -48,6 +48,11 @@ public class UserController {
         return userService.findByName(name);  // Call the service method
     }
     
+//    @GetMapping("/getUserByName")
+//    public User getUserByName(@RequestParam String name) {
+//        return userService.findByName(name);  // Call the service method
+//    }
+    
     @DeleteMapping("/deleteUserById/{id}") 
     public void deleteUserById(@PathVariable("id") int id) {    	
     	userService.deleteUserByID(id);

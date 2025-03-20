@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // ----------------------------------------------------------------------------------
 
-  const Login = ({handleLoginSuccess})  => {
+  const Login = ({setUserId, handleLoginSuccess})  => {
   // const navigate = useNavigate();
   const [name, setUsername] = useState('');
   const [pwd, setPassword] = useState('');
@@ -20,12 +20,14 @@ import { useNavigate } from 'react-router-dom';
       // Send the user data to the backend API
       const response = await axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
       // const response = axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
-    
+      const userData = response.data; // Extract the data from response
+
       // Check if the registration was successful
       if (response.status === 200) {
         alert('User login successfully!');
         console.log('Login Response:', response.data);
         handleLoginSuccess(true);
+        setUserId(userData.user_id);
       } else {
         // Handle any non-200 responses here
         alert('Invalid credentials');

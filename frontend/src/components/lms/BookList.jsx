@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AddBook from './AddBook';
+import SearchBook from './SearchBook';
 
-function BookList({ user_id, books, setBooks }) {
+// function BookList({ user_id, books, setBooks }) {
+function BookList({user_id}) {
   const navigate = useNavigate();  // This hook allows navigation to another route
+//-------Book----------------------------------------------------------------
+  const [books, setBooks] = useState([]);
+  const [searchedBook, setSearchedBook] = useState(null);
+  //------------------------------------------------------------------------
+  const [showAddBookSection, setShowAddBookSection] = useState(false);
+  // const [showUpdateBookSection, setShowUpdateBookSection] = useState(false);
+  const [showSearchBookSection, setShowSearchBookSection] = useState(false);
+ 
+  useEffect(() => {
+    axios.get('http://localhost:9000/api/books')
+      .then(response => setBooks(response.data))
+      .catch(error => console.error('Error fetching books:', error));
+  },  []);
 
   const handleUpdateBook = (id) => {
     // Redirect to the UpdateBook component, passing the book's ID as a URL parameter
@@ -36,6 +52,7 @@ function BookList({ user_id, books, setBooks }) {
   };
 
   const handleBorrowBook = (bookid,userid) => {
+    console.log(user_id);
     const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${userid}`)
     
      // Check if the registration was successful
@@ -51,6 +68,30 @@ function BookList({ user_id, books, setBooks }) {
 
   return (
     <div>
+      <h1>Book List</h1>
+      <button onClick={() => setShowAddBookSection(!showAddBookSection)}>
+        {showAddBookSection ? 'Hide Add Book' : 'Add a New Book'}
+      </button>
+
+      <button onClick={() => setShowSearchBookSection(!showSearchBookSection)}>
+        {showSearchBookSection ? 'Hide Search Book' : 'Search for a Book'}
+      </button>
+
+      {showAddBookSection && <AddBook setBooks={setBooks} />}
+      {/* {showUpdateBookSection && <UpdateBook setBooks={setBooks} />} */}
+      {showSearchBookSection && <SearchBook setBooks={setBooks} />}
+
+      {/* <p>{error && <span style={{ color: 'red' }}>{error}</span>}</p> */}
+
+      {/* {!searchedBook && !showSearchBookSection && !showAddBookSection && (
+        <BookList user_id = {user_id} books={books} setBooks={setBooks} />
+      )}
+
+      {searchedBook && !showAddBookSection && (
+        // <BookList books={[searchedBook]} setBooks={setBooks} handleDeleteBook={handleAllBook} />
+        <BookList user_id = {user_id} books={[searchedBook]} setBooks={setBooks} />
+      )} */}
+      
       <table border="1" style={{ width: '100%', borderCollapse: 'collapse'}}>
         <thead>
           <tr>

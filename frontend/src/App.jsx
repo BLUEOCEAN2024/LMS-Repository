@@ -18,6 +18,7 @@ import Register from './components/lms/Register';
 import NavBar from "./components/lms/NavBar";
 
 function App() {
+  const [userId, setUserId] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);  // Track authentication state
   const [isRegistering, setIsRegistering] = useState(true);  
 
@@ -49,7 +50,7 @@ function App() {
         {/* Show login/register form if not authenticated */}
         {!isAuthenticated ? (
           <div className="form-container">
-            {isRegistering ? <Register /> : <Login handleLoginSuccess={handleLoginSuccess} />}
+            {isRegistering ? <Register /> : <Login setUserId={setUserId} handleLoginSuccess={handleLoginSuccess} />}
           </div>
         ) : (
           <>

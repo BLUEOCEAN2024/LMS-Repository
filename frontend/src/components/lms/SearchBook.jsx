@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function SearchBook({ setSearchedBook }) {
+function SearchBook({ setBooks }) {
   const [title, setTitle] = useState('');
 
   const handleSearchBook = () => {
     if (!title) {
-      setSearchedBook(null);
+      setBooks(null);
       return;
     }
     axios.get(`http://localhost:9000/api/books/getBookByTitle/${title}`)
-      .then(response => setSearchedBook(response.data))
+      .then(response => setBooks(response.data))
       .catch(error => console.error('Error fetching book:', error));
   };
 
