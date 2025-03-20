@@ -39,7 +39,8 @@ function UserList({ users, setUsers }) {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users && users.length > 0 ? (
+          users.map(user => (
             <tr key={user.user_id}>
               {/* <td align="left" hidden={true}>{user.user_id}</td> */}
               <td align="left" >{user.user_id}</td>
@@ -56,7 +57,10 @@ function UserList({ users, setUsers }) {
                 <button onClick={() => handleDeleteUser(user.user_id)}>Delete</button>
               </td>
             </tr>
-          ))}
+          ))
+        ) : (
+          <tr><td colSpan="6" align="center">No records found</td></tr>
+        )}
         </tbody>
       </table>
     </div>

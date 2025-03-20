@@ -1,159 +1,102 @@
 import './App.css';
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
-
-import {Component} from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 import BookList from './components/lms/BookList';
+import BorrowList from './components/lms/BorrowList';
 import UserList from './components/lms/UserList';
 import AddBook from './components/lms/AddBook';
 import AddUser from './components/lms/AddUser';
 import UpdateBook from './components/lms/UpdateBook';
 import SearchBook from './components/lms/SearchBook';
+import SearchBorrowRec from './components/lms/SearchBorrowRec';
 import SearchUser from './components/lms/SearchUser';
 import Login from './components/lms/Login';
 import Register from './components/lms/Register';
 
+import NavBar from "./components/lms/NavBar";
+
 function App() {
-  const [error, setError] = useState('');  
-  //-------User-----------------------------------------------------------------
-  const [users, setUsers] = useState([]);
-  const [searchedUser, setSearchedUser] = useState(null);
-  //------------------------------------------------------------------------
-  const [showAddUserSection, setShowAddUserSection] = useState(false);
-  const [showSearchUserSection, setShowSearchUserSection] = useState(false);  
-  //-------Book----------------------------------------------------------------
-  const [books, setBooks] = useState([]);
-  const [searchedBook, setSearchedBook] = useState(null);
-  //------------------------------------------------------------------------
-  const [showAddBookSection, setShowAddBookSection] = useState(false);
-  // const [showUpdateBookSection, setShowUpdateBookSection] = useState(false);
-  const [showSearchBookSection, setShowSearchBookSection] = useState(false);
-  //------------------------------------------------------------------------
+  const [isAuthenticated, setIsAuthenticated] = useState(false);  // Track authentication state
   const [isRegistering, setIsRegistering] = useState(true);  
 
-  useEffect(() => {
-    axios.get('http://localhost:9000/api/books')
-      .then(response => setBooks(response.data))
-      .catch(error => console.error('Error fetching books:', error));
-      
-    axios.get('http://localhost:9000/api/users')
-      .then(response => {
-        setUsers(response.data);
-      })
-      .catch(error => console.error('Error fetching books:', error));
-  },  []);
-
-  //------------------------------------------------------------------------
-  const handleAllBook = () => {
-    axios.get('http://localhost:9000/api/books')
-      .then(response => {
-        setBooks(response.data);
-        // setShowAddBookSection(false);
-        // setShowSearchBookSection(false);
-      })
-      .catch(error => console.error('Error fetching users:', error));
+  // Handle login success and set isAuthenticated to true
+  const handleLoginSuccess = (isLogin) => {
+    if (isLogin == true) {
+      setIsAuthenticated(true);
+    }
+    else {
+      setIsAuthenticated(true);
+    }
   };
 
-  // ------------------------------------------------------------------------
-  const handleAllUser = () => {
-    axios.get('http://localhost:9000/api/users')
-      .then(response => {
-        setUsers(response.data);
-      })
-      .catch(error => console.error('Error fetching books:', error));
+  // Handle logout and reset authentication state
+  const handleLogout = () => {
+    setIsAuthenticated(false);
   };
 
-  //------------------------------------------------------------------------
+  // Toggle between Register and Login
   const toggleForm = () => {
-    setIsRegistering(!isRegistering); // Toggle the form between Register and Login
+    setIsRegistering(!isRegistering); 
   };
-  //------------------------------------------------------------------------
+
   return (
     <Router>
+      <div>
+        <h1>Library Management System</h1>
+        
+        {/* Show login/register form if not authenticated */}
+        {!isAuthenticated ? (
+          <div className="form-container">
+            {isRegistering ? <Register /> : <Login handleLoginSuccess={handleLoginSuccess} />}
+          </div>
+        ) : (
+          <>
+            {/* Navigation menu only after successful login */}
+            {/* <nav>
+              <ul>
+                <li><Link to="/books">Book and Lending Management </Link></li>
+                <li><Link to="/borrow-history">Lending History</Link></li>
+                <li><Link to="/users">User Management</Link></li>
+                <li><button onClick={handleLogout}>Logout</button></li>
+              </ul>
+            </nav> */}
+            <NavBar />
+            {/* Define Routes for different components */}
+            <Routes>
+              <Route path="/book-management" element={<BookList />} />
+              <Route path="/lending-management" element={<BorrowList />} />
+              <Route path="/user-management" element={<UserList />} />
+              <Route path="/add-book" element={<AddBook />} />
+              <Route path="/add-user" element={<AddUser />} />
+              <Route path="/update-book" element={<UpdateBook />} />
+              <Route path="/search-book" element={<SearchBook />} />
+              <Route path="/search-borrow-rec" element={<SearchBorrowRec />} />
+              <Route path="/search-user" element={<SearchUser />} />
+            </Routes>
+          </>
+        )}
 
-    <div >
-      <h1>Library Management System</h1>  
-        <div className="form-toggle-buttons">
-          <button
-            className={`toggle-button ${isRegistering ? 'active' : ''}`}
-            onClick={toggleForm}
-          >
-            Register
+        {/* Form toggle buttons for Register/Login */}
+        {!isAuthenticated && (
+          <div className="form-toggle-buttons">
+            <button
+              className={`toggle-button ${isRegistering ? 'active' : ''}`}
+              onClick={toggleForm}
+            >
+              Register
+            </button>
 
-          </button>
-          <button
-            className={`toggle-button ${!isRegistering ? 'active' : ''}`}
-            onClick={toggleForm}
-          >
-            Login
-          </button>
-        </div>
-
-        <div className="form-container">
-          {isRegistering ? <Register /> : <Login />}
-        </div>      
-
-      {/* --------------------USERS---------------------------------------------------- */}
-      <button onClick={() => setShowAddUserSection(!showAddUserSection)}>
-        {showAddUserSection ? 'Hide Add User' : 'Add a New User'}
-      </button>
-
-      <button onClick={() => setShowSearchUserSection(!showSearchUserSection)}>
-        {showSearchUserSection ? 'Hide Search User' : 'Search for a User'}
-      </button>
-      
-      {showAddUserSection && <AddUser setUsers={setUsers} />}
-      {/* {showUpdateBookSection && <UpdateBook setBooks={setBooks} />} */}
-      {showSearchUserSection && <SearchUser setSearchedUser={setSearchedUser} />}
-
-      <p>{error && <span style={{ color: 'red' }}>{error}</span>}</p>
-
-      {!searchedUser && !showSearchUserSection && !showAddUserSection && (
-        <UserList users={users} setUsers={setUsers} />
-      )}
-
-      {searchedUser && !showAddUserSection && (
-        <UserList users={[searchedUser]} setUsers={setUsers} />
-      )}
-      
-      {/* ---------------------BOOKS--------------------------------------------------- */}
-      <button onClick={() => setShowAddBookSection(!showAddBookSection)}>
-        {showAddBookSection ? 'Hide Add Book' : 'Add a New Book'}
-      </button>
-
-      <button onClick={() => setShowSearchBookSection(!showSearchBookSection)}>
-        {showSearchBookSection ? 'Hide Search Book' : 'Search for a Book'}
-      </button>
-
-      {showAddBookSection && <AddBook setBooks={setBooks} />}
-      {/* {showUpdateBookSection && <UpdateBook setBooks={setBooks} />} */}
-      {showSearchBookSection && <SearchBook setSearchedBook={setSearchedBook} />}
-
-      <p>{error && <span style={{ color: 'red' }}>{error}</span>}</p>
-
-      {/* display all book*/}
-      {/* {!searchedBook && !showSearchBookSection && !showAddBookSection && (
-        <BookList books={books} setBooks={setBooks} />
-      )} */}
-
-      {/* display search result */}
-      {searchedBook && !showAddBookSection && (
-        // <BookList books={[searchedBook]} setBooks={setBooks} handleDeleteBook={handleAllBook} />
-        <BookList books={[searchedBook]} setBooks={setBooks} />
-      )}
-
-      {/* ------------------------------------------------------------------------ */}
-
-
-    </div>
-      <Routes>
-        {/* {!searchedBook || !showSearchBookSection || !showAddBookSection ||  */}
-          <Route path="/" element={<BookList books={books} setBooks={setBooks} />} />  
-        {/* } */}
-        {/* <Route path="/update-book/:id" element={<UpdateBook />} /> */}
-      </Routes>
+            <button
+              className={`toggle-button ${!isRegistering ? 'active' : ''}`}
+              onClick={toggleForm}
+            >
+              Login
+            </button>
+          </div>
+        )}
+      </div>
     </Router>
   );
 }

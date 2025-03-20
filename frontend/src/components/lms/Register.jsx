@@ -4,30 +4,13 @@ import axios from 'axios';
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [pwd, setPassword] = useState('');
   const [role, setRole] = useState('MEMBER');
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const user = { name, email, password, role };
-    
-  //   try {
-  //     // await axios.post('http://localhost:9090/api/users/register', user);
-      
-  //     console.error('values:' +  JSON.stringify(user, null, 2));
-  //     axios.post('http://localhost:9000/api/users/registerUser', user);
-  //     alert('User registered successfully!');
-  //   } catch (error) {      
-  //     console.error('values:' +  JSON.stringify(user, null, 2));
-  //     alert('Error registering user');
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const user = { name, email, password, role };
+    const user = { name, email, pwd, role };
   
     try {
       // Send the user data to the backend API
@@ -68,7 +51,7 @@ const Register = () => {
       />
       <input
         type="password"
-        value={password}
+        value={pwd}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required

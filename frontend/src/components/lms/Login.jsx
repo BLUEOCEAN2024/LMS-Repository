@@ -6,47 +6,37 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 // ----------------------------------------------------------------------------------
 
-// const Login = ({ sendMessage } )  => {
-  const Login = ()  => {
+  const Login = ({handleLoginSuccess})  => {
   // const navigate = useNavigate();
   const [name, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [pwd, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // try {
-    //   // await axios.post('http://localhost:9090/api/auth/login', { username, password });
-    //   axios.post('http://localhost:9090/api/auth/login', { username, password });
-    //   // sendMessage (true);
-    //   alert('Login successful');
-
-    //   // navigate('/main-menu', { state: { isVisible: true } }); // Redirect to <MainMenu />;      
-    // } catch (error) {
-    //   // sendMessage (false);
-    //   alert('Invalid credentials');
-    // }
-
-    const user = { name, password };
-
+    const user = { name, pwd };
+      
     try {
       // Send the user data to the backend API
-      const response = await axios.get('http://localhost:9000/api/auth/login', user);
-      
+      const response = await axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
+      // const response = axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
+    
       // Check if the registration was successful
       if (response.status === 200) {
         alert('User login successfully!');
         console.log('Login Response:', response.data);
+        handleLoginSuccess(true);
       } else {
         // Handle any non-200 responses here
         alert('Invalid credentials');
-        console.error('Login Error:', response.data);
+        console.error('Login Error:', response.data);        
+        handleLoginSuccess(false);
       }
     } catch (error) {
-      // In case of error in the request    
-      console.error('values:' +  JSON.stringify(user, null, 2));
+      // console.error('values:' +  JSON.stringify(user, null, 2));
       console.error('Error details:', error);
-      alert('Error Login user');
+      alert('Error Login user');       
+      handleLoginSuccess(false);
     }
   };
 
@@ -61,7 +51,7 @@ import { useNavigate } from 'react-router-dom';
       />
       <input
         type="password"
-        value={password}
+        value={pwd}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required

@@ -2,17 +2,22 @@ package com.example.lms_backend.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity(name = "tbl_borrow_hist")
 public class BorrowHistory {
     @Id
-    private int hist_id;
-    private int book_id;
-    private int user_id;
+    @Column(name = "hist_id")
+    private int histid;
+    @Column(name = "book_id")
+    private int bookid;
+    @Column(name = "user_id")
+    private int userid;
     private Date borrow_dt;
     private Date return_dt;
+    private String status;
     private String created_by;
     private Date created_dt;
 
@@ -25,31 +30,31 @@ public class BorrowHistory {
     	    , Date created_dt
     	    ) 
     {
-        this.hist_id = hist_id;
-        this.book_id = book_id;
-        this.user_id = user_id;
+        this.histid = hist_id;
+        this.bookid = book_id;
+        this.userid = user_id;
         this.borrow_dt = borrow_dt;
         this.return_dt = return_dt;
         this.created_by = created_by;
         this.created_dt = created_dt;
     }
 	public int getHist_id() {
-		return hist_id;
+		return histid;
 	}
 	public void setHist_id(int hist_id) {
-		this.hist_id = hist_id;
+		this.histid = hist_id;
 	}
 	public int getBook_id() {
-		return book_id;
+		return bookid;
 	}
 	public void setBook_id(int book_id) {
-		this.book_id = book_id;
+		this.bookid = book_id;
 	}
 	public int getUser_id() {
-		return user_id;
+		return userid;
 	}
 	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+		this.userid = user_id;
 	}
 	public Date getBorrow_dt() {
 		return borrow_dt;
@@ -74,6 +79,12 @@ public class BorrowHistory {
 	}
 	public void setCreated_dt(Date created_dt) {
 		this.created_dt = created_dt;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
     
     

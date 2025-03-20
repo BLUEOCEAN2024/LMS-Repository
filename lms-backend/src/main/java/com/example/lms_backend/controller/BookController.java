@@ -46,8 +46,8 @@ public class BookController {
     }
     
     @GetMapping("/getBookById/{id}") 
-    public Book getBookById(@PathVariable("id") int id) {
-        return bookRepository.findById(id).orElse(null);
+    public Book getBookById(@PathVariable("id") int book_id) {
+        return bookRepository.findById(book_id).orElse(null);
     }
         
     @GetMapping("/getBookByTitle/{title}")
@@ -56,13 +56,13 @@ public class BookController {
     }
     
     @DeleteMapping("/deleteBookById/{id}") 
-    public void deleteBookById(@PathVariable("id") int id) {    	
-        bookService.deleteBookByID(id);
+    public void deleteBookById(@PathVariable("id") int book_id) {    	
+        bookService.deleteBookByID(book_id);
     }
     
     @PutMapping("/updateBook/{id}") 
-    public ResponseEntity<String>  updateBook(@PathVariable("id") int id, @RequestBody Book book) {
-        Optional<Book> updatedBook = bookService.updateBook(id, book);
+    public ResponseEntity<String>  updateBook(@PathVariable("id") int book_id, @RequestBody Book book) {
+        Optional<Book> updatedBook = bookService.updateBook(book_id, book);
 
         if (updatedBook.isPresent()) {
             return ResponseEntity.ok("Book updated successfully");
@@ -72,7 +72,7 @@ public class BookController {
     }
     
     @PutMapping("/borrowBook/{id}") 
-    public List<Book>  borrowBook(@PathVariable("id") int id, @RequestBody Book book) {  
+    public List<Book>  borrowBook(@PathVariable("id") int book_id, @RequestBody Book book) {  
     	   
     	book.setStatus("Borrowed");
 //    	bookService.updateBook(id, book);
@@ -82,10 +82,10 @@ public class BookController {
     }
     
     @PutMapping("/returnBook/{id}") 
-    public List<Book>  returnBook(@PathVariable("id") int id, @RequestBody Book book) {  
+    public List<Book>  returnBook(@PathVariable("id") int book_id, @RequestBody Book book) {  
 
     	book.setStatus("Available");
-//    	bookService.updateBook(id, book);
+//    	bookService.updateBook(book_id, book);
     	bookRepository.save(book);
         return bookService.getAllBooks();
     }

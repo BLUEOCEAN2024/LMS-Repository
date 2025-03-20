@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function BookList({ books, setBooks }) {
+function BookList({ user_id, books, setBooks }) {
   const navigate = useNavigate();  // This hook allows navigation to another route
 
   const handleUpdateBook = (id) => {
@@ -21,28 +21,32 @@ function BookList({ books, setBooks }) {
       });
   };
 
-  const handleBorrowBook = (id,book) => {
-    axios.put(`http://localhost:9000/api/books/borrowBook/${id}`, book)
-      .then(response => {
-        setBooks(books.filter(book => book.book_id !== id)); // Update the books list
-      })
-      .catch(error => {
-        console.error('Error borrowing book:', error);
-        console.error('values:' +  JSON.stringify(book, null, 2));
-        alert('There was an error borrowing the book.');
-      });
+  const handleReturnBook = (bookid,userid) => {
+    const response = axios.post(`http://localhost:9000/api/borrowhistory/returnBook?bookid=${bookid}&userid=${userid}`)
+    
+     // Check if the registration was successful
+     if (response.status === 200) {
+      alert('Book returned successfully!');
+      console.log('Return Response:', response.data);
+    } else {
+      // Handle any non-200 responses here
+      alert('Book is not available!');
+      console.error('Return Error:', response.data);
+    }
   };
 
-  const handleReturnBook = (id,book) => {
-    axios.put(`http://localhost:9000/api/books/returnBook/${id}`, book)
-      .then(response => {
-        setBooks(books.filter(book => book.book_id !== id)); // Update the books list
-      })
-      .catch(error => {
-        console.error('Error returning book:', error);
-        console.error('values:' +  JSON.stringify(book, null, 2));
-        alert('There was an error returning the book.');
-      });
+  const handleBorrowBook = (bookid,userid) => {
+    const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${userid}`)
+    
+     // Check if the registration was successful
+     if (response.status === 200) {
+      alert('Book borrowed successfully!');
+      console.log('Borrow Response:', response.data);
+    } else {
+      // Handle any non-200 responses here
+      alert('Book is not available!');
+      console.error('Borrow Error:', response.data);
+    }
   };
 
   return (
@@ -50,7 +54,7 @@ function BookList({ books, setBooks }) {
       <table border="1" style={{ width: '100%', borderCollapse: 'collapse'}}>
         <thead>
           <tr>
-            <th >ID</th>
+            <th>ID</th>
             <th>Title</th>
             <th>Author</th>
             <th>ISBN</th>
@@ -64,7 +68,9 @@ function BookList({ books, setBooks }) {
           </tr>
         </thead>
         <tbody>
-          {books.map(book => (
+          
+        {books && books.length > 0 ? (
+          books.map(book => (
             <tr key={book.book_id}>
               <td align="left" >{book.book_id}</td>
               <td align="left">{book.title}</td>
@@ -80,13 +86,16 @@ function BookList({ books, setBooks }) {
                 <button onClick={() => handleDeleteBook(book.book_id)}>Delete</button>
               </td>
               <td>
-                <button onClick={() => handleBorrowBook(book.book_id, book)}>Borrow</button>
+                <button onClick={() => handleBorrowBook(book.book_id, user_id)}>Borrow</button>
               </td>
               <td>
-                <button onClick={() => handleReturnBook(book.book_id, book)}>Return</button>
+                <button onClick={() => handleReturnBook(book.book_id, user_id)}>Return</button>
               </td>
             </tr>
-          ))}
+          ))
+          ) : (
+            <tr><td colSpan="6" align="center">No records found</td></tr>
+          )}
         </tbody>
       </table>
     </div>

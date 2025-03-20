@@ -37,6 +37,7 @@ VALUES
 commit;
 
 select * from tbl_users;
+-- truncate table tbl_users;
 
 -- Table: Books
 drop table tbl_books;
@@ -78,27 +79,39 @@ select * from tbl_books;
 -- Table: Borrow_Hist
 drop table tbl_borrow_hist;
 CREATE TABLE tbl_borrow_hist (
-    hist_id         INT PRIMARY KEY,
+    hist_id         INT AUTO_INCREMENT PRIMARY KEY,
     book_id         INT NOT NULL,
     user_id         INT NOT NULL,
-    borrow_dt       DATE NOT NULL,
-    return_dt       DATE NOT NULL,
+    borrow_dt       DATE ,
+    return_dt       DATE ,
+    status			nvarchar(50)	default 'available',
     created_by      NVARCHAR(50) NOT NULL,
-    created_dt      DATE,
-    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES tbl_books(book_id),
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES tbl_users(user_id)
+    created_dt      DATE
+--     CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES tbl_books(book_id),
+--     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES tbl_users(user_id)
 );
 
-truncate tbl_borrow_hist;
 INSERT INTO tbl_borrow_hist (hist_id,book_id, user_id, borrow_dt, return_dt, created_by,created_dt) 
 VALUES 
 (1, 1, 1, '2025-01-2', '2025-02-2', 'system',  NOW()),
 (2, 2, 2, '2025-01-2', '2025-02-2', 'system',  NOW()),
 (3, 3, 3, '2025-01-2', '2025-02-2', 'system',  NOW())
 ;
+
+INSERT INTO tbl_borrow_hist (book_id, user_id, borrow_dt, return_dt, created_by,created_dt) 
+VALUES 
+( 1, 1, '2025-01-2', '2025-02-2', 'system',  NOW()),
+( 2, 2, '2025-01-2', '2025-02-2', 'system',  NOW()),
+( 3, 3, '2025-01-2', '2025-02-2', 'system',  NOW())
+;
 commit;
 
-select * from tbl_borrow_hist;
+select * from tbl_borrow_hist ;
+-- delete from tbl_borrow_hist where hist_id in (1,2,3);
+-- truncate table tbl_borrow_hist;
+
+select bh1_0.hist_id,bh1_0.book_id,bh1_0.borrow_dt,bh1_0.created_by,bh1_0.created_dt,bh1_0.return_dt,bh1_0.status,bh1_0.user_id from tbl_borrow_hist bh1_0 where bh1_0.book_id=3;
+select b1_0.book_id,b1_0.author,b1_0.created_by,b1_0.created_dt,b1_0.genre,b1_0.isbn,b1_0.status,b1_0.title,b1_0.updated_by,b1_0.updated_dt,b1_0.year_published from tbl_books b1_0 where b1_0.book_id=3;
 
 -- Table: Roles
 drop table tbl_roles;

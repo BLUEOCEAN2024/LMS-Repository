@@ -26,20 +26,22 @@ public class BookService {
        
     // Method to find a book by title
     public Book findByTitle(String title) {
-        Optional<Book> book = bookRepository.findByTitle(title);
-        return book.orElse(null);  // Return the book if found, otherwise return null
+//        Optional<Book> book = bookRepository.findByTitle(title);
+//        return book.orElse(null);  // Return the book if found, otherwise return null
+
+    	return bookRepository.findByTitle(title);
     }
 
-    public void deleteBookByID(int id) {
-        bookRepository.deleteById(id);
+    public void deleteBookByID(int book_id) {
+        bookRepository.deleteById(book_id);
     }
 
     public void deleteBook(Book book) {
         bookRepository.delete(book);
     }
     
-    public Optional<Book> updateBook(int id, Book updatedBook) {
-        Optional<Book> existingBook = bookRepository.findById(id);
+    public Optional<Book> updateBook(int book_id, Book updatedBook) {
+        Optional<Book> existingBook = bookRepository.findById(book_id);
 
         if (existingBook.isPresent()) {
             Book book = existingBook.get();
