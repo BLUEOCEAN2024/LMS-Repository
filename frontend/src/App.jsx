@@ -13,6 +13,7 @@ import SearchBook from './components/lms/SearchBook';
 import SearchBorrowRec from './components/lms/SearchBorrowRec';
 import SearchUser from './components/lms/SearchUser';
 import Login from './components/lms/Login';
+import Logout from './components/lms/Logout';
 import Register from './components/lms/Register';
 
 import NavBar from "./components/lms/NavBar";
@@ -29,7 +30,9 @@ function App() {
     }
     else {
       setIsAuthenticated(true);
-    }
+      setUserId(null);  // Optionally reset userId
+      navigate('/');  // Redirect to the home page (login/register page)
+    };
   };
 
   // Handle logout and reset authentication state
@@ -66,7 +69,7 @@ function App() {
             <NavBar />
             {/* Define Routes for different components */}
             <Routes>
-              <Route path="/book-management" element={<BookList />} />
+              <Route path="/book-management" element={<BookList user_id={userId}/>} />
               <Route path="/lending-management" element={<BorrowList />} />
               <Route path="/user-management" element={<UserList />} />
               <Route path="/add-book" element={<AddBook />} />
@@ -75,7 +78,8 @@ function App() {
               <Route path="/search-book" element={<SearchBook />} />
               <Route path="/search-borrow-rec" element={<SearchBorrowRec />} />
               <Route path="/search-user" element={<SearchUser />} />
-            </Routes>
+              <Route path="/logout" element={<Logout handleLogout={handleLogout}/>} />
+              </Routes>
           </>
         )}
 

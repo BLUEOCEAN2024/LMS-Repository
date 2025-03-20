@@ -37,8 +37,8 @@ function BookList({user_id}) {
       });
   };
 
-  const handleReturnBook = (bookid,userid) => {
-    const response = axios.post(`http://localhost:9000/api/borrowhistory/returnBook?bookid=${bookid}&userid=${userid}`)
+  const handleReturnBook = (bookid,user_id) => {
+    const response = axios.post(`http://localhost:9000/api/borrowhistory/returnBook?bookid=${bookid}&userid=${user_id}`)
     
      // Check if the registration was successful
      if (response.status === 200) {
@@ -51,9 +51,9 @@ function BookList({user_id}) {
     }
   };
 
-  const handleBorrowBook = (bookid,userid) => {
+  const handleBorrowBook = (bookid,user_id) => {
     console.log(user_id);
-    const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${userid}`)
+    const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${user_id}`)
     
      // Check if the registration was successful
      if (response.status === 200) {
@@ -68,7 +68,7 @@ function BookList({user_id}) {
 
   return (
     <div>
-      <h1>Book List</h1>
+      <h2>Book List</h2>
       <button onClick={() => setShowAddBookSection(!showAddBookSection)}>
         {showAddBookSection ? 'Hide Add Book' : 'Add a New Book'}
       </button>
