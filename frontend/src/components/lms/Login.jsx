@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import MainMenu from "../MainMenu";
-// import VerticalMenu from "../VerticalMenu"
+import { Link } from 'react-router-dom';
 // ----------------------------------------------------------------------------------
 import { useNavigate } from 'react-router-dom';
 // ----------------------------------------------------------------------------------
 
-  const Login = ({setUserId, handleLoginSuccess})  => {
+  const Login = ({handlePasswordReset, handleLoginSuccess})  => {
   // const navigate = useNavigate();
   const [name, setUsername] = useState('');
   const [pwd, setPassword] = useState('');
@@ -20,19 +19,17 @@ import { useNavigate } from 'react-router-dom';
       // Send the user data to the backend API
       const response = await axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
       // const response = axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
-      const userData = response.data; // Extract the data from response
-
+      console.log("response:"+response.data);
       // Check if the registration was successful
-      if (response.status === 200) {
+      // if (response.data === null || response.data === undefined ) {// Handle any non-200 responses here
+      if (!response.data) {// Handle any non-200 responses here
+          alert('Invalid credentials');
+        console.error('Login Error:', response.data);        
+        handleLoginSuccess(false);
+      } else {
         alert('User login successfully!');
         console.log('Login Response:', response.data);
         handleLoginSuccess(true);
-        setUserId(userData.user_id);
-      } else {
-        // Handle any non-200 responses here
-        alert('Invalid credentials');
-        console.error('Login Error:', response.data);        
-        handleLoginSuccess(false);
       }
     } catch (error) {
       // console.error('values:' +  JSON.stringify(user, null, 2));
@@ -59,6 +56,8 @@ import { useNavigate } from 'react-router-dom';
         required
       />
       <button type="submit">Login</button>
+      <a onClick={() => handlePasswordReset('reset')}>Reset Password</a>
+        
     </form>
   );
 };

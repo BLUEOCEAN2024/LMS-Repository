@@ -55,9 +55,14 @@ public class AuthController {
     
     @GetMapping("/login")
     public User login(@RequestParam String name, @RequestParam String password) {
-     return userService.login(name,password);
+//     return userService.login(name,password);
+     User user = userService.login(name, password);
+     if (user == null) {
+         return null;  // Return null when login fails
+     }
+     return user;  // Return the user object when login is successful
 
-  }
+    }
 
 //  @PostMapping("/login")
 //  public String login(@RequestParam String name, @RequestParam String password) {

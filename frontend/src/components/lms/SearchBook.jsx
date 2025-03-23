@@ -6,7 +6,10 @@ function SearchBook({ setBooks }) {
 
   const handleSearchBook = () => {
     if (!title) {
-      setBooks(null);
+      axios.get('http://localhost:9000/api/books')
+      .then(response => setBooks(response.data))
+      .catch(error => console.error('Error fetching books:', error));
+  
       return;
     }
     axios.get(`http://localhost:9000/api/books/getBookByTitle/${title}`)

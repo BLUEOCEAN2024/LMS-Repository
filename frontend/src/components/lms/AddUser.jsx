@@ -7,14 +7,14 @@ function AddUser({ setUsers }) {
   const [identity, setIdentity] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');  
-  // const [membereffectivefrom, setMemberEffectiveFrom] = useState('');
+  const [role, setRole] = useState('');
   const [createdBy, setCreatedBy] = useState('');
   const [error, setError] = useState('');
   //------------------------------------------------------------------------
   
   const handleAddUser = () => {
     // const newBook = { name, pwd, identity, email, phone, membereffectivefrom, createdBy };
-    const newUser = { name, pwd, identity, email, phone, created_by: createdBy };
+    const newUser = { name, pwd, identity, email, phone, role, created_by: user_id };
     
     axios.post('http://localhost:9000/api/users/addUser', newUser)
       .then(response => {
@@ -24,7 +24,7 @@ function AddUser({ setUsers }) {
         setIdentity('');
         setEmail('');
         setPhone('');
-        // setMemberEffectiveFrom('');a
+        setRole('');
         setCreatedBy('');
         setError('');
       })
@@ -43,7 +43,12 @@ function AddUser({ setUsers }) {
       <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
       <input type="number" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />      
       {/* <input type="number" placeholder="Member Effective From" value={membereffectivefrom} onChange={(e) => setMemberEffectiveFrom(e.target.value)} /> */}
-      <input type="text" placeholder="Created By" value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} />
+      <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <option value="Select" disable >Select</option>
+        <option value="LIBRARIAN">Librarian</option>
+        <option value="MEMBER">Member</option>
+      </select>
+      {/* <input type="text" placeholder="Created By" value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} /> */}
       <button onClick={handleAddUser}>Add User</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>

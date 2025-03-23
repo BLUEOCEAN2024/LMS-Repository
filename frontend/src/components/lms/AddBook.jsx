@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function AddBook({ setBooks }) {
+function AddBook({ user_id, setBooks }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [isbn, setIsbn] = useState('');
@@ -11,7 +11,7 @@ function AddBook({ setBooks }) {
   const [error, setError] = useState('');
 
   const handleAddBook = () => {
-    const newBook = { title, author, isbn, genre, year_published: yearPublished, created_by: createdBy };
+    const newBook = { title, author, isbn, genre, year_published: yearPublished, created_by: user_id };
     
     axios.post('http://localhost:9000/api/books/addBook', newBook)
       .then(response => {
@@ -37,7 +37,7 @@ function AddBook({ setBooks }) {
       <input type="text" placeholder="ISBN" value={isbn} onChange={(e) => setIsbn(e.target.value)} />
       <input type="text" placeholder="Genre" value={genre} onChange={(e) => setGenre(e.target.value)} />
       <input type="number" placeholder="Year Published" value={yearPublished} onChange={(e) => setYearPublished(e.target.value)} />
-      <input type="text" placeholder="Created By" value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} />
+      {/* <input type="text" placeholder="Created By" value={createdBy} onChange={(e) => setCreatedBy(e.target.value)} /> */}
       <button onClick={handleAddBook}>Add Book</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>

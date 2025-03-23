@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class BorrowHistoryController {
 //    }
     
     @GetMapping("/searchBorrowHistoryByBookId") 
-    public BorrowHistory  searchBorrowHistoryByBookId(@RequestParam int bookid) {
+    public List<BorrowHistory>  searchBorrowHistoryByBookId(@RequestParam int bookid) {
         return borrowhistoryService.searchBorrowHistoryByBookId(bookid);
     }
     
@@ -48,22 +49,61 @@ public class BorrowHistoryController {
     }
     
     @PostMapping("/borrowBook")
-    public ResponseEntity<String> borrowBook(@RequestParam int bookid, @RequestParam int userid) {
+
+//    public ResponseEntity<String> borrowBook(@RequestParam int bookid, @RequestParam int userid) {
+    public ResponseEntity<?> borrowBook(@RequestParam int bookid, @RequestParam int userid) {
         boolean isBorrowed = borrowhistoryService.borrowBook(bookid,userid);
-        if (isBorrowed) {
+        if (!isBorrowed) {
+//            return ResponseEntity.ok("Book borrowed successfully");
+            return new ResponseEntity<>("Book borrowed successfully!", HttpStatus.OK);
+        } else {
+//            return ResponseEntity.status(404).body("Book not available");
+            return new ResponseEntity<>("Book borrowed successfully!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/returnBook")
+//    public ResponseEntity<String> returnBook(@RequestParam int bookid, @RequestParam int userid) {
+    public ResponseEntity<?> returnBook(@RequestParam int bookid, @RequestParam int userid) {
+        boolean isReturned = borrowhistoryService.returnBook(bookid,userid);
+        if (!isReturned) {
+//            return ResponseEntity.ok("Book borrowed successfully");
+            return new ResponseEntity<>("Book returned successfully!", HttpStatus.OK);
+        } else {
+//            return ResponseEntity.status(404).body("Book not available");
+            return new ResponseEntity<>("Book is not returned!", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @PostMapping("/reserveBook")
+    public ResponseEntity<String> reserveBook(@RequestParam int bookid, @RequestParam int userid) {
+        boolean isReserved = borrowhistoryService.reserveBook(bookid,userid);
+        if (!isReserved) {
             return ResponseEntity.ok("Book borrowed successfully");
         } else {
             return ResponseEntity.status(404).body("Book not available");
         }
     }
-
-    @PostMapping("/returnBook")
-    public ResponseEntity<String> returnBook(@RequestParam int bookid, @RequestParam int userid) {
-        boolean isReturned = borrowhistoryService.returnBook(bookid,userid);
-        if (isReturned) {
+    
+    @PostMapping("/borrowReservedBook")
+//    public ResponseEntity<String> borrowReservedBook(@RequestParam int bookid, @RequestParam int userid) {
+    public ResponseEntity<?> borrowReservedBook(@RequestParam int bookid, @RequestParam int userid) {
+        boolean isBorrowed = borrowhistoryService.borrowReservedBook(bookid,userid);
+        if (!isBorrowed) {
             return ResponseEntity.ok("Book borrowed successfully");
         } else {
             return ResponseEntity.status(404).body("Book not available");
+        }
+    }
+    
+    @PostMapping("/releaseReservedBook")
+//    public ResponseEntity<String> releaseReservedBook(@RequestParam int bookid, @RequestParam int userid) {
+    public ResponseEntity<?> releaseReservedBook(@RequestParam int bookid, @RequestParam int userid) {
+        boolean isReleased = borrowhistoryService.releaseReservedBook(bookid,userid);
+        if (!isReleased) {
+            return ResponseEntity.ok("Book released successfully");
+        } else {
+            return ResponseEntity.status(404).body("Book not released");
         }
     }
 }

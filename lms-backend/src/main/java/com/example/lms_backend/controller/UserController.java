@@ -44,14 +44,14 @@ public class UserController {
     }
     
     @GetMapping("/getUserByName/{name}")
-    public User getUserByName(@PathVariable("name") String name) {
+    public List<User> getUserByName(@PathVariable("name") String name) {
         return userService.findByName(name);  // Call the service method
     }
     
-//    @GetMapping("/getUserByName")
-//    public User getUserByName(@RequestParam String name) {
-//        return userService.findByName(name);  // Call the service method
-//    }
+    @GetMapping("/getUserById/{id}")
+    public User getUserById(@PathVariable("id") int id) {
+        return userService.findByUserId(id);  // Call the service method
+    }
     
     @DeleteMapping("/deleteUserById/{id}") 
     public void deleteUserById(@PathVariable("id") int id) {    	
@@ -77,4 +77,14 @@ public class UserController {
             return new ResponseEntity<>("Error registering user", HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @PostMapping("/updateUser/{id}") 
+    public User updateUser(@RequestBody User user) {
+    	// Create a Date object to get the current date
+        Date currentDate = new Date();       
+        user.setCreated_dt(currentDate);
+    	
+        return userService.updateUser(user); 
+    }
+    
 }

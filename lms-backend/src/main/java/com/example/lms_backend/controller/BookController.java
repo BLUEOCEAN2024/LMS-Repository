@@ -40,7 +40,8 @@ public class BookController {
     public Book addBook(@RequestBody Book book) {
     	// Create a Date object to get the current date
         Date currentDate = new Date();       
-    	book.setCreated_dt(currentDate);
+    	book.setCreated_dt(currentDate);    	   
+    	book.setStatus("available");
     	
         return bookService.addBook(book);
     }

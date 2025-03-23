@@ -5,11 +5,11 @@ import AddUser from './AddUser';
 import SearchUser from './SearchUser';
 
 // function UserList({ users, setUsers }) {
-function UserList({user_id}) {
+function UserList({users, setUsers}) {
   const navigate = useNavigate();  // This hook allows navigation to another route
   //-------User-----------------------------------------------------------------
-  const [users, setUsers] = useState([]);
-  const [searchedUser, setSearchedUser] = useState(null);
+  // const [users, setUsers] = useState([]);
+  // const [searchedUser, setSearchedUser] = useState(null);
   //------------------------------------------------------------------------
   const [showAddUserSection, setShowAddUserSection] = useState(false);
   const [showSearchUserSection, setShowSearchUserSection] = useState(false);  
@@ -20,15 +20,22 @@ function UserList({user_id}) {
       .catch(error => console.error('Error fetching users:', error));
     },  []);
 
-  const handleUpdateUser = (users) => {
+  const fetchUser = () => {
+    axios.get('http://localhost:9000/api/users')
+      .then(response => setUsers(response.data))
+      .catch(error => console.error('Error fetching users:', error));
+    };
+    
+  const handleUpdateUser = (userId) => {
     // Redirect to the UpdateBook component, passing the user's ID as a URL parameter
-    // navigate(`/components/${users.user_id}`);
+    navigate(`/update-user/${userId}`);
   };
 
   const handleDeleteUser = (id) => {
     axios.delete(`http://localhost:9000/api/users/deleteUserById/${id}`)
       .then(response => {
         setUsers(users.filter(user => users.user_id !== id)); // Update the users list
+        fetchUser();
       })
       .catch(error => {
         console.error('Error deleting user:', error);
@@ -48,7 +55,7 @@ function UserList({user_id}) {
         {showSearchUserSection ? 'Hide Search User' : 'Search for a User'}
       </button>
       {showAddUserSection && <AddUser setUsers={setUsers} />}
-      {showSearchUserSection && <SearchUser setUsers={setUsers} />}
+      {showSearchUserSection && <SearchUser users={users} setUsers={setUsers} />}
 
       {/* {!searchedUser && !showSearchUserSection && !showAddUserSection && (
         <UserList users={users} setUsers={setUsers} />
@@ -68,7 +75,7 @@ function UserList({user_id}) {
             <th>Identity</th>
             <th>Email</th>
             <th>Phone</th>            
-            {/* <th>Member Effective From</th> */}
+            <th>Role</th>
             <th>Update</th>
             <th>Delete</th>
           </tr>
@@ -84,9 +91,10 @@ function UserList({user_id}) {
               <td align="left">{user.identity}</td>
               <td align="left">{user.email}</td>
               <td align="left">{user.phone}</td>
+              <td align="left">{user.role}</td>
               {/* <td align="center">{user.member_effective_from}</td> */}
               <td>
-                <button onClick={() => handleUpdateUser(user)}>Update</button>
+                <button onClick={() => handleUpdateUser(user.user_id)}>Update</button>
               </td>
               <td>
                 <button onClick={() => handleDeleteUser(user.user_id)}>Delete</button>

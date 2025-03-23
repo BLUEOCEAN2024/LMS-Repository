@@ -5,7 +5,7 @@ import AddBook from './AddBook';
 import SearchBook from './SearchBook';
 
 // function BookList({ user_id, books, setBooks }) {
-function BookList({user_id}) {
+function BookList() {
   const navigate = useNavigate();  // This hook allows navigation to another route
 //-------Book----------------------------------------------------------------
   const [books, setBooks] = useState([]);
@@ -21,6 +21,16 @@ function BookList({user_id}) {
       .catch(error => console.error('Error fetching books:', error));
   },  []);
 
+  // Function to fetch the latest books or borrow history
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/api/books'); // Update with correct endpoint
+      setBooks(response.data);
+    } catch (error) {
+      console.error('Error fetching books:', error);
+    }
+  };
+  
   const handleUpdateBook = (id) => {
     // Redirect to the UpdateBook component, passing the book's ID as a URL parameter
     navigate(`/update-book/${id}`);
@@ -30,6 +40,7 @@ function BookList({user_id}) {
     axios.delete(`http://localhost:9000/api/books/deleteBookById/${id}`)
       .then(response => {
         setBooks(books.filter(book => book.book_id !== id)); // Update the books list
+        fetchBooks();
       })
       .catch(error => {
         console.error('Error deleting book:', error);
@@ -37,32 +48,38 @@ function BookList({user_id}) {
       });
   };
 
-  const handleReturnBook = (bookid,user_id) => {
-    const response = axios.post(`http://localhost:9000/api/borrowhistory/returnBook?bookid=${bookid}&userid=${user_id}`)
-    
-     // Check if the registration was successful
-     if (response.status === 200) {
-      alert('Book returned successfully!');
-      console.log('Return Response:', response.data);
-    } else {
-      // Handle any non-200 responses here
-      alert('Book is not available!');
-      console.error('Return Error:', response.data);
-    }
-  };
 
-  const handleBorrowBook = (bookid,user_id) => {
-    console.log(user_id);
+
+  const handleBorrowBook = async (bookid,user_id) => {
     const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${user_id}`)
-    
+    console.log(response.status)
      // Check if the registration was successful
      if (response.status === 200) {
-      alert('Book borrowed successfully!');
-      console.log('Borrow Response:', response.data);
-    } else {
       // Handle any non-200 responses here
       alert('Book is not available!');
       console.error('Borrow Error:', response.data);
+    } else {
+      alert('Book borrowed successfully!');
+      console.log('Borrow Response:', response.data);
+      // Refresh data after borrowing the book
+      await fetchBooks();
+    }
+  };
+
+  const handleReserveBook = async (bookid,user_id) => {
+    console.log(user_id);
+    const response = axios.post(`http://localhost:9000/api/borrowhistory/reserveBook?bookid=${bookid}&userid=${user_id}`)
+    
+     // Check if the registration was successful
+     if (response.status === 200) {;
+      // Handle any non-200 responses here
+      alert('Book is not Reserved!');
+      console.error('Reserve Error:', response.data);
+    } else {
+      alert('Book reserved successfully!');
+      console.log('Reserve Response:', response.data);
+      // Refresh data after borrowing the book
+      await fetchBooks();
     }
   };
 
@@ -77,7 +94,7 @@ function BookList({user_id}) {
         {showSearchBookSection ? 'Hide Search Book' : 'Search for a Book'}
       </button>
 
-      {showAddBookSection && <AddBook setBooks={setBooks} />}
+      {showAddBookSection && <AddBook user_id={user_id} setBooks={setBooks} />}
       {/* {showUpdateBookSection && <UpdateBook setBooks={setBooks} />} */}
       {showSearchBookSection && <SearchBook setBooks={setBooks} />}
 
@@ -104,8 +121,8 @@ function BookList({user_id}) {
             <th>Status</th>
             <th>Update</th>
             <th>Delete</th>
-            <th>Borrow</th>
-            <th>Return</th>
+            <th>Borrow</th>         
+            <th>Reserve</th>
           </tr>
         </thead>
         <tbody>
@@ -130,7 +147,7 @@ function BookList({user_id}) {
                 <button onClick={() => handleBorrowBook(book.book_id, user_id)}>Borrow</button>
               </td>
               <td>
-                <button onClick={() => handleReturnBook(book.book_id, user_id)}>Return</button>
+                <button onClick={() => handleReserveBook(book.book_id, user_id)}>Reserve</button>
               </td>
             </tr>
           ))

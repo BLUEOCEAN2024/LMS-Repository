@@ -15,23 +15,35 @@ import SearchUser from './components/lms/SearchUser';
 import Login from './components/lms/Login';
 import Logout from './components/lms/Logout';
 import Register from './components/lms/Register';
+import PasswordReset from './components/lms/PasswordReset';
+import UpdateUser from './components/lms/UpdateUser';
 
 import NavBar from "./components/lms/NavBar";
 
 function App() {
-  const [userId, setUserId] = useState(false);
+   //-------User-----------------------------------------------------------------
+  const [users, setUsers] = useState([]);
+  
+  const [userId, setUserId] = useState(false);  
+  const [loginId, setLoginId] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);  // Track authentication state
   const [isRegistering, setIsRegistering] = useState(true);  
+  const [currentOption, setCurrentOption] = useState(true);  
 
+  useEffect(() => {
+    // console.log("useEffect:" + isRegistering);
+  },  []);
+  
   // Handle login success and set isAuthenticated to true
   const handleLoginSuccess = (isLogin) => {
+    console.log("isLogin:"+isLogin)
     if (isLogin == true) {
       setIsAuthenticated(true);
     }
     else {
-      setIsAuthenticated(true);
-      setUserId(null);  // Optionally reset userId
-      navigate('/');  // Redirect to the home page (login/register page)
+      setIsAuthenticated(false);
+      setLoginId(null);  // Optionally reset userId
+      // navigate('/');  // Redirect to the home page (login/register page)
     };
   };
 
@@ -40,9 +52,19 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  // Handle login success and set isAuthenticated to true
+  const handlePasswordReset = (option) => {
+      setCurrentOption(option);
+  };
+  
   // Toggle between Register and Login
   const toggleForm = () => {
     setIsRegistering(!isRegistering); 
+    // console.log("toggle:" + isRegistering);
+    if (!isRegistering) 
+      {setCurrentOption("register");}
+    else 
+      {setCurrentOption("login");}
   };
 
   return (
@@ -53,7 +75,14 @@ function App() {
         {/* Show login/register form if not authenticated */}
         {!isAuthenticated ? (
           <div className="form-container">
-            {isRegistering ? <Register /> : <Login setUserId={setUserId} handleLoginSuccess={handleLoginSuccess} />}
+            {/* {isRegistering ? <Register /> : <Login setUserId={setUserId} handleLoginSuccess={handleLoginSuccess} />} */}
+            {currentOption === "reset" ? (
+              <PasswordReset setCurrentOption={setCurrentOption}/>
+            ) : currentOption === "login" ? (
+              <Login handlePasswordReset={handlePasswordReset} handleLoginSuccess={handleLoginSuccess}/>
+            ) : (
+              <Register />
+            )}
           </div>
         ) : (
           <>
@@ -69,9 +98,9 @@ function App() {
             <NavBar />
             {/* Define Routes for different components */}
             <Routes>
-              <Route path="/book-management" element={<BookList user_id={userId}/>} />
+              <Route path="/book-management" element={<BookList />} />
               <Route path="/lending-management" element={<BorrowList />} />
-              <Route path="/user-management" element={<UserList />} />
+              <Route path="/user-management" element={<UserList users={users} setUsers={setUsers}/>} />
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/add-user" element={<AddUser />} />
               <Route path="/update-book" element={<UpdateBook />} />
@@ -79,6 +108,8 @@ function App() {
               <Route path="/search-borrow-rec" element={<SearchBorrowRec />} />
               <Route path="/search-user" element={<SearchUser />} />
               <Route path="/logout" element={<Logout handleLogout={handleLogout}/>} />
+              <Route path="/password-reset" element={<PasswordReset />} />
+              <Route path="/update-user/:userid" element={<UpdateUser />} />
               </Routes>
           </>
         )}

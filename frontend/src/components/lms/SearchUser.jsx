@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 // function SearchUser({ setSearchedUser }) {
-function SearchUser({ setUsers }) {
+function SearchUser({ users, setUsers }) {
   const [name, setName] = useState('');
 
   const handleSearchUser = () => {

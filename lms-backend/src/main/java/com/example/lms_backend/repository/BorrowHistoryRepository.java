@@ -11,7 +11,7 @@ import com.example.lms_backend.model.BorrowHistory;
 @Repository
 public interface BorrowHistoryRepository extends JpaRepository<BorrowHistory, Integer> {
 
-	BorrowHistory findByBookid(int bookid);
+	List<BorrowHistory> findByBookid(int bookid);
 
 	List<BorrowHistory> findByUserid(int userid);
 	

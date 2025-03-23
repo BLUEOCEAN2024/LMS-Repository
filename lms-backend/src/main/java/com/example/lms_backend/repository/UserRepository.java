@@ -18,11 +18,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //	}
 //
 //	public User save(User user) {
-//		// TODO Auto-generated method stub
+//		// TODO Auto-generated method stubs
 //		return null;
 //	}
 	
-    Optional<User> findByName(String name);
     Optional<User> findByEmail(String email);
+
+
+    Optional<User> findByName(String name);
 
 }
