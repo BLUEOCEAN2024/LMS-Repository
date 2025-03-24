@@ -1,5 +1,5 @@
 import './App.css';
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
@@ -17,15 +17,14 @@ import Logout from './components/lms/Logout';
 import Register from './components/lms/Register';
 import PasswordReset from './components/lms/PasswordReset';
 import UpdateUser from './components/lms/UpdateUser';
-
+import { AuthProvider } from './components/lms/AuthContext';  // Import AuthProvider
 import NavBar from "./components/lms/NavBar";
 
 function App() {
    //-------User-----------------------------------------------------------------
-  const [users, setUsers] = useState([]);
-  
-  const [userId, setUserId] = useState(false);  
-  const [loginId, setLoginId] = useState(false);
+  // const [users, setUsers] = useState([]);
+  // const [userId, setUserId] = useState(false);  
+  // const [loginId, setLoginId] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);  // Track authentication state
   const [isRegistering, setIsRegistering] = useState(true);  
   const [currentOption, setCurrentOption] = useState(true);  
@@ -36,13 +35,13 @@ function App() {
   
   // Handle login success and set isAuthenticated to true
   const handleLoginSuccess = (isLogin) => {
-    console.log("isLogin:"+isLogin)
+    // console.log("isLogin:"+isLogin)
     if (isLogin == true) {
       setIsAuthenticated(true);
     }
     else {
       setIsAuthenticated(false);
-      setLoginId(null);  // Optionally reset userId
+      // setLoginId(null);  // Optionally reset userId
       // navigate('/');  // Redirect to the home page (login/register page)
     };
   };
@@ -68,6 +67,7 @@ function App() {
   };
 
   return (
+    <AuthProvider>
     <Router>
       <div>
         <h1>Library Management System</h1>
@@ -98,16 +98,17 @@ function App() {
             <NavBar />
             {/* Define Routes for different components */}
             <Routes>
+              
               <Route path="/book-management" element={<BookList />} />
               <Route path="/lending-management" element={<BorrowList />} />
-              <Route path="/user-management" element={<UserList users={users} setUsers={setUsers}/>} />
+              <Route path="/user-management" element={<UserList />} />
               <Route path="/add-book" element={<AddBook />} />
-              <Route path="/add-user" element={<AddUser />} />
-              <Route path="/update-book" element={<UpdateBook />} />
+              <Route path="/add-user/" element={<AddUser />} />
+              <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search-book" element={<SearchBook />} />
               <Route path="/search-borrow-rec" element={<SearchBorrowRec />} />
               <Route path="/search-user" element={<SearchUser />} />
-              <Route path="/logout" element={<Logout handleLogout={handleLogout}/>} />
+              <Route path="/logout" element={<Logout handleLogout={handleLogout} />} />
               <Route path="/password-reset" element={<PasswordReset />} />
               <Route path="/update-user/:userid" element={<UpdateUser />} />
               </Routes>
@@ -134,6 +135,7 @@ function App() {
         )}
       </div>
     </Router>
+  </AuthProvider>
   );
 }
 

@@ -6,7 +6,7 @@ function UpdateBook() {
   const { id } = useParams();  // Get the book ID from the URL
   // const navigate = useNavigate();
   
-  // const [book, setBook] = useState(null);
+  const [book, setBook] = useState(null);
 
   useEffect(() => {
     // Fetch book details by ID when the component mounts
@@ -32,7 +32,8 @@ function UpdateBook() {
     axios.put(`http://localhost:9000/api/books/updateBook/${id}`, book)
       .then(response => {
         alert('Book updated successfully');
-        navigate('/'); // Redirect to the book list after updating
+        // navigate('/'); // Redirect to the book list after updating
+        return;
       })
       .catch(error => {
         console.error('Error updating book:', error);

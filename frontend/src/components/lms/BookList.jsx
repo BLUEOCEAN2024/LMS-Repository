@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AddBook from './AddBook';
 import SearchBook from './SearchBook';
+import { AuthContext } from './AuthContext';  // Import AuthProvider
 
 // function BookList({ user_id, books, setBooks }) {
 function BookList() {
+  const { loginUser, books, setBooks } = useContext(AuthContext);
   const navigate = useNavigate();  // This hook allows navigation to another route
 //-------Book----------------------------------------------------------------
-  const [books, setBooks] = useState([]);
-  const [searchedBook, setSearchedBook] = useState(null);
+  // const [books, setBooks] = useState([]);
+  // const [searchedBook, setSearchedBook] = useState(null);
   //------------------------------------------------------------------------
   const [showAddBookSection, setShowAddBookSection] = useState(false);
   // const [showUpdateBookSection, setShowUpdateBookSection] = useState(false);
   const [showSearchBookSection, setShowSearchBookSection] = useState(false);
  
-  useEffect(() => {
-    axios.get('http://localhost:9000/api/books')
-      .then(response => setBooks(response.data))
-      .catch(error => console.error('Error fetching books:', error));
+  const user_id = loginUser.user_id;
+
+  useEffect(() => {    
+    // console.log("title:"+title);
+    console.error('books:' +  JSON.stringify(books, null, 2));
+
+    if (books !== null && books !== "" ) {
+      axios.get('http://localhost:9000/api/books')
+        .then(response => setBooks(response.data))
+        .catch(error => console.error('Error fetching books:', error));
+    }
   },  []);
 
   // Function to fetch the latest books or borrow history
@@ -33,7 +42,9 @@ function BookList() {
   
   const handleUpdateBook = (id) => {
     // Redirect to the UpdateBook component, passing the book's ID as a URL parameter
+    // console.log(id);
     navigate(`/update-book/${id}`);
+    fetchBooks();
   };
 
   const handleDeleteBook = (id) => {
@@ -52,7 +63,7 @@ function BookList() {
 
   const handleBorrowBook = async (bookid,user_id) => {
     const response = axios.post(`http://localhost:9000/api/borrowhistory/borrowBook?bookid=${bookid}&userid=${user_id}`)
-    console.log(response.status)
+    // console.log(response.status)
      // Check if the registration was successful
      if (response.status === 200) {
       // Handle any non-200 responses here
@@ -94,9 +105,9 @@ function BookList() {
         {showSearchBookSection ? 'Hide Search Book' : 'Search for a Book'}
       </button>
 
-      {showAddBookSection && <AddBook user_id={user_id} setBooks={setBooks} />}
+      {showAddBookSection && <AddBook />}
       {/* {showUpdateBookSection && <UpdateBook setBooks={setBooks} />} */}
-      {showSearchBookSection && <SearchBook setBooks={setBooks} />}
+      {showSearchBookSection && <SearchBook />}
 
       {/* <p>{error && <span style={{ color: 'red' }}>{error}</span>}</p> */}
 

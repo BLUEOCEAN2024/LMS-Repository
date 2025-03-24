@@ -15,28 +15,33 @@ CREATE TABLE tbl_users (
     identity		nvarchar(50)  ,
     email 			nvarchar(50)  ,
     phone 			nvarchar(50)  ,
-	role ENUM('LIBRARIAN', 'MEMBER') DEFAULT 'MEMBER',
+	role 			ENUM('LIBRARIAN', 'MEMBER') DEFAULT 'MEMBER',
     created_by		nvarchar(50) ,
     created_dt		date
 --     CONSTRAINT pk_user_id PRIMARY KEY (user_id)
 );
 
-INSERT INTO tbl_users (user_id,name, pwd, identity, email, phone, member_effective_from, created_by,created_dt) 
-VALUES 
-(1,'karen', 'karen', 'S202501A', 'karen@hotmail.com', '91234567', '2025-01-01', 'system',  NOW()),
-(2,'sam', 'sam', 'S202501B', 'sam@hotmail.com', '81234567', '2025-01-01', 'system',  NOW()),
-(3,'andy', 'andy', 'S202501C', 'andy@hotmail.com', '71234567', '2025-01-01', 'system',  NOW())
-;
+-- SHOW INDEXES FROM tbl_users;
+ALTER TABLE tbl_users
+MODIFY COLUMN name NVARCHAR(100) NOT NULL,
+ADD CONSTRAINT unique_name UNIQUE(name);
 
-INSERT INTO tbl_users (name, pwd, identity, email, phone, created_by,created_dt) 
-VALUES 
-('karen', 'karen', 'S202501A', 'karen@hotmail.com', '91234567', 'system',  NOW()),
-('sam', 'sam', 'S202501B', 'sam@hotmail.com', '81234567', 'system',  NOW()),
-('andy', 'andy', 'S202501C', 'andy@hotmail.com', '71234567', 'system',  NOW())
-;
-commit;
+-- INSERT INTO tbl_users (user_id,name, pwd, identity, email, phone, member_effective_from, created_by,created_dt) 
+-- VALUES 
+-- (1,'karen', 'karen', 'S202501A', 'karen@hotmail.com', '91234567', '2025-01-01', 'system',  NOW()),
+-- (2,'sam', 'sam', 'S202501B', 'sam@hotmail.com', '81234567', '2025-01-01', 'system',  NOW()),
+-- (3,'andy', 'andy', 'S202501C', 'andy@hotmail.com', '71234567', '2025-01-01', 'system',  NOW())
+-- ;
 
-select * from tbl_users where pwd='karen';
+-- INSERT INTO tbl_users (name, pwd, identity, email, phone, created_by,created_dt) 
+-- VALUES 
+-- ('karen', 'karen', 'S202501A', 'karen@hotmail.com', '91234567', 'system',  NOW()),
+-- ('sam', 'sam', 'S202501B', 'sam@hotmail.com', '81234567', 'system',  NOW()),
+-- ('andy', 'andy', 'S202501C', 'andy@hotmail.com', '71234567', 'system',  NOW())
+-- ;
+-- commit;
+
+-- select * from tbl_users; 
 -- truncate table tbl_users;
 
 -- Table: Books

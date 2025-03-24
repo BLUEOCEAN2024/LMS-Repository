@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';  // Import AuthProvider
 
-function AddUser({ setUsers }) {
+function AddUser() {
+  
+  const { loginUser, setUsers } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [pwd, setPwd] = useState('');
   const [identity, setIdentity] = useState('');
@@ -14,8 +17,12 @@ function AddUser({ setUsers }) {
   
   const handleAddUser = () => {
     // const newBook = { name, pwd, identity, email, phone, membereffectivefrom, createdBy };
-    const newUser = { name, pwd, identity, email, phone, role, created_by: user_id };
-    
+    const newUser = { name, pwd, identity, email, phone, role, created_by: loginUser.user_id };
+     
+    // console.log("loginUser (stringified):", JSON.stringify(loginUser.user_id, null, 2));
+    // console.log("loginUser Type:", typeof loginUser.user_id);
+    // console.log("loginUser Value:", JSON.stringify(loginUser.user_id, null, 2));  
+
     axios.post('http://localhost:9000/api/users/addUser', newUser)
       .then(response => {
         setUsers(prevUsers => [...prevUsers, response.data]);

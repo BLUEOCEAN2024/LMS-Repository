@@ -53,7 +53,7 @@ public class BorrowHistoryController {
 //    public ResponseEntity<String> borrowBook(@RequestParam int bookid, @RequestParam int userid) {
     public ResponseEntity<?> borrowBook(@RequestParam int bookid, @RequestParam int userid) {
         boolean isBorrowed = borrowhistoryService.borrowBook(bookid,userid);
-        if (!isBorrowed) {
+        if (isBorrowed) {
 //            return ResponseEntity.ok("Book borrowed successfully");
             return new ResponseEntity<>("Book borrowed successfully!", HttpStatus.OK);
         } else {
@@ -62,23 +62,39 @@ public class BorrowHistoryController {
         }
     }
 
+//    @PostMapping("/returnBook")
+////    public ResponseEntity<String> returnBook(@RequestParam int bookid, @RequestParam int userid) {
+//    public ResponseEntity<?> returnBook(@RequestParam int bookid, @RequestParam int userid) {
+//        boolean isReturned = borrowhistoryService.returnBook(bookid,userid);
+//        if (isReturned) {
+////            return ResponseEntity.ok("Book borrowed successfully");
+//            return new ResponseEntity<>("Book returned successfully!", HttpStatus.OK);
+//        } else {
+////            return ResponseEntity.status(404).body("Book not available");
+//            return new ResponseEntity<>("Book is not returned!", HttpStatus.NOT_FOUND );
+//        }
+//    }
+    
     @PostMapping("/returnBook")
-//    public ResponseEntity<String> returnBook(@RequestParam int bookid, @RequestParam int userid) {
-    public ResponseEntity<?> returnBook(@RequestParam int bookid, @RequestParam int userid) {
-        boolean isReturned = borrowhistoryService.returnBook(bookid,userid);
-        if (!isReturned) {
-//            return ResponseEntity.ok("Book borrowed successfully");
-            return new ResponseEntity<>("Book returned successfully!", HttpStatus.OK);
-        } else {
-//            return ResponseEntity.status(404).body("Book not available");
-            return new ResponseEntity<>("Book is not returned!", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> returnBook(@RequestParam int bookid, @RequestParam int userid) {
+        try {
+            boolean isReturned = borrowhistoryService.returnBook(bookid, userid);
+            
+            if (isReturned) {
+                return ResponseEntity.ok("Book returned successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book was not found or not borrowed.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while returning the book.");
         }
     }
     
     @PostMapping("/reserveBook")
     public ResponseEntity<String> reserveBook(@RequestParam int bookid, @RequestParam int userid) {
         boolean isReserved = borrowhistoryService.reserveBook(bookid,userid);
-        if (!isReserved) {
+        if (isReserved) {
             return ResponseEntity.ok("Book borrowed successfully");
         } else {
             return ResponseEntity.status(404).body("Book not available");
@@ -100,7 +116,7 @@ public class BorrowHistoryController {
 //    public ResponseEntity<String> releaseReservedBook(@RequestParam int bookid, @RequestParam int userid) {
     public ResponseEntity<?> releaseReservedBook(@RequestParam int bookid, @RequestParam int userid) {
         boolean isReleased = borrowhistoryService.releaseReservedBook(bookid,userid);
-        if (!isReleased) {
+        if (isReleased) {
             return ResponseEntity.ok("Book released successfully");
         } else {
             return ResponseEntity.status(404).body("Book not released");

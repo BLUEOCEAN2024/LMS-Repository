@@ -41,9 +41,8 @@ public class UserService {
     	userRepository.deleteById(id);
     }
     
-    public List<User> findByName(String name) {
+    public Optional<User> findByName(String name) {
         return userRepository.findByName(name);
-        ;  // Return the book if found, otherwise return null
     }
     
     public User findByUserId(int id) {

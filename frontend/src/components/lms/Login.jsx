@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthContext';  // Import AuthProvider
 // ----------------------------------------------------------------------------------
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 // ----------------------------------------------------------------------------------
 
   const Login = ({handlePasswordReset, handleLoginSuccess})  => {
   // const navigate = useNavigate();
+  
+  const { setLoginUser } = useContext(AuthContext);  
   const [name, setUsername] = useState('');
   const [pwd, setPassword] = useState('');
 
@@ -18,8 +20,10 @@ import { useNavigate } from 'react-router-dom';
     try {
       // Send the user data to the backend API
       const response = await axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
-      // const response = axios.get(`http://localhost:9000/api/auth/login?name=${name}&password=${pwd}`);
-      console.log("response:"+response.data);
+
+      // console.log("response:"+response.data);      
+      // console.log("loginId Value:", JSON.stringify(response.data, null, 2));  
+
       // Check if the registration was successful
       // if (response.data === null || response.data === undefined ) {// Handle any non-200 responses here
       if (!response.data) {// Handle any non-200 responses here
@@ -28,7 +32,9 @@ import { useNavigate } from 'react-router-dom';
         handleLoginSuccess(false);
       } else {
         alert('User login successfully!');
-        console.log('Login Response:', response.data);
+        // console.log('Login User Id:', response.data.user_id);
+        // console.log('Login Response:', response.data);
+        setLoginUser(response.data); // Store loginIds
         handleLoginSuccess(true);
       }
     } catch (error) {

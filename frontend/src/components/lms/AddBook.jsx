@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';  // Import AuthProvider
 
-function AddBook({ user_id, setBooks }) {
+function AddBook() {
+  
+  const { loginUser, setBooks } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [isbn, setIsbn] = useState('');
@@ -11,7 +14,7 @@ function AddBook({ user_id, setBooks }) {
   const [error, setError] = useState('');
 
   const handleAddBook = () => {
-    const newBook = { title, author, isbn, genre, year_published: yearPublished, created_by: user_id };
+    const newBook = { title, author, isbn, genre, year_published: yearPublished, created_by:  loginUser.user_id };
     
     axios.post('http://localhost:9000/api/books/addBook', newBook)
       .then(response => {
@@ -24,9 +27,10 @@ function AddBook({ user_id, setBooks }) {
         setCreatedBy('');
         setError('');
       })
-      .catch(error => {
-        setError('There was an error adding the book.');
-      });
+      // .catch(error => {
+      //   setError('There was an error adding the book.');
+      // })
+      ;
   };
 
   return (

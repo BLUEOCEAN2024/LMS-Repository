@@ -44,7 +44,7 @@ public class UserController {
     }
     
     @GetMapping("/getUserByName/{name}")
-    public List<User> getUserByName(@PathVariable("name") String name) {
+    public Optional<User> getUserByName(@PathVariable("name") String name) {
         return userService.findByName(name);  // Call the service method
     }
     
