@@ -2,8 +2,7 @@ import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';  // Import AuthProvider
 
-function AddBook() {
-  
+function AddBook() {  
   const { loginUser, setBooks } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');

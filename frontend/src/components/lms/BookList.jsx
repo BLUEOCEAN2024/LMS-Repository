@@ -21,7 +21,7 @@ function BookList() {
 
   useEffect(() => {    
     // console.log("title:"+title);
-    console.error('books:' +  JSON.stringify(books, null, 2));
+    console.error('BookList:' +  JSON.stringify(books, null, 2));
 
     if (books !== null && books !== "" ) {
       axios.get('http://localhost:9000/api/books')

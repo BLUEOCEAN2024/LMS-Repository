@@ -25,7 +25,7 @@ public class BookService {
     }
        
     // Method to find a book by title
-    public Book findByTitle(String title) {
+    public List<Book> findByTitle(String title) {
 //        Optional<Book> book = bookRepository.findByTitle(title);
 //        return book.orElse(null);  // Return the book if found, otherwise return null
 

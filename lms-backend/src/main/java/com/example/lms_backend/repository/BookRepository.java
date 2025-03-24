@@ -21,7 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 //		return null;
 //	}
 
-    Book findByTitle(String title);
+    List<Book> findByTitle(String title);
 //    Optional<Book> findById(int bookId);
     
 	

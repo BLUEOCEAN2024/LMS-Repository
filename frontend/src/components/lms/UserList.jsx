@@ -21,22 +21,20 @@ function UserList() {
     // if (!showSearchUserSection) {
     //   setSearchUsers([]);
     // }
-    if (Array.isArray(searchUsers) && searchUsers.length === 0) {
+
+    if (users !== null && users !== "" ) {
     axios.get('http://localhost:9000/api/users')
-      .then(response => {
-        setUsers(response.data);
-        // console.log("response.data :", JSON.stringify(response.data , null, 2));
-      })
+      .then(response => {setUsers(response.data)      })
       .catch(error => console.error('Error fetching users:', error));
     } 
-    // if (showSearchUserSection) {
-    //   setUsers(searchUsers);
-    // }
-    // else{
-      // console.log("searchUsers :", JSON.stringify(searchUsers , null, 2));
-    //   setUsers(searchUsers);
-    //   console.log("users :", JSON.stringify(users , null, 2));
-    // }  
+
+    
+    if (users !== null && users !== "" ) {
+      axios.get('http://localhost:9000/api/books')
+        .then(response => {setBooks(response.data)})
+        .catch(error => console.error('Error fetching books:', error));
+    }
+    
     // console.log("loginId (stringified):", JSON.stringify(users.user_id , null, 2));
     // console.log("loginId Type:", typeof loginId);
     // console.log("loginId Value:", JSON.stringify(loginId, null, 2));  

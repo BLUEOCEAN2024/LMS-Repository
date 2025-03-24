@@ -51,8 +51,13 @@ public class BookController {
         return bookRepository.findById(book_id).orElse(null);
     }
         
+//    @GetMapping("/getBookByTitle/{title}")
+//    public Book getBookByTitle(@PathVariable("title") String title) {
+//        return bookService.findByTitle(title);  // Call the service method
+//    }   
+
     @GetMapping("/getBookByTitle/{title}")
-    public Book getBookByTitle(@PathVariable("title") String title) {
+    public List<Book> getBookByTitle(@PathVariable("title") String title) {
         return bookService.findByTitle(title);  // Call the service method
     }
     

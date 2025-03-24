@@ -14,6 +14,15 @@ export const AuthProvider = ({ children }) => {
   const [users, setUsers] = useState([]);  // Make sure `users` is always an array
   const [loginUser, setLoginUser] = useState(null);
 //   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLibrarian, setIsLibrarian] = useState(null);
+
+  const setRole = (role) => {   
+    if(role == 'LIBRARIAN'){
+      setIsLibrarian(true);
+    }else{
+      setIsLibrarian(false)
+    }
+  };
 
   // const login = (userId) => {    
   // const login = (loginUser) => {
@@ -34,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     // <AuthContext.Provider value={{ loginId, isAuthenticated, login, logout }}>
-    <AuthContext.Provider value={{ books, setBooks, borrowRecs, setBorrowRecs, searchUsers, setSearchUsers, users, setUsers, loginUser, setLoginUser }}>
+    <AuthContext.Provider value={{ isLibrarian, setIsLibrarian, books, setBooks, borrowRecs, setBorrowRecs, searchUsers, setSearchUsers, users, setUsers, loginUser, setLoginUser }}>
       {children}
     </AuthContext.Provider>
   );

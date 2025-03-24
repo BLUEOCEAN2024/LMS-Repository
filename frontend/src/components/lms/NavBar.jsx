@@ -1,13 +1,21 @@
 // NavBar.js
-import React from 'react';
+import { React, useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './AuthContext';  // Import AuthProvider
 
 const NavBar = () => {
+  
+  const { loginUser  } = useContext(AuthContext);
+  const role = loginUser.role;
+  
   return (
     <nav style={styles.navBar}>
       <ul style={styles.navList}>
         <li style={styles.navItem}>
-          <Link to="/user-management" style={styles.link}>User Management</Link>
+          {role === 'LIBRARIAN' && (
+            <Link to="/user-management" style={styles.link}>User Management</Link>
+          )}
+          {/* <Link to="/user-management" style={styles.link}>User Management</Link> */}
         </li>
         <li style={styles.navItem}>
           <Link to="/book-management" style={styles.link}>Book Management</Link>
