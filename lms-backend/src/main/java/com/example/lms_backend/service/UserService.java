@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.lms_backend.model.Book;
+import com.example.lms_backend.model.BorrowHistory;
 import com.example.lms_backend.model.PasswordResetToken;
 import com.example.lms_backend.model.User;
 import com.example.lms_backend.repository.PasswordResetTokenRepository;
@@ -22,8 +23,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
+//    @Autowired
+//    private PasswordResetTokenRepository passwordResetTokenRepository;
     
 //    @Autowired
 //    private JavaMailSender javaMailSender;
@@ -57,33 +58,53 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    public User registerUser(String name, String email, String password, String role) {
-       Optional<User> existingUser = userRepository.findByName(name);
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Username already exists");
-        }    
-        
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPwd(password); 
-        user.setRole(role);
-        Date currentDate = new Date();   
-        user.setCreated_dt(currentDate);
-        
-        return userRepository.save(user);
-    }   
+//    public User registerUser(String name, String email, String password, String role) {
+//       Optional<User> existingUser = userRepository.findByName(name);
+//        if (existingUser.isPresent()) {
+//            throw new RuntimeException("Username already exists");
+//        }    
+//        
+//        User user = new User();
+//        user.setName(name);
+//        user.setEmail(email);
+//        user.setPwd(password); 
+//        user.setRole(role);
+//        Date currentDate = new Date();   
+//        user.setCreated_dt(currentDate);
+//        
+//        return userRepository.save(user);
+//    }   
+    
+//    public User login(String name, String password) {
+//        Optional<User> existingUser = userRepository.findByName(name);
+//        if (existingUser.isPresent()) {
+//        	User user = existingUser.get();
+//            if (password.equals(user.getPwd())) {
+//        		return user;
+//        	}
+//        };
+//		return null;
+//    }
     
     public User login(String name, String password) {
-        Optional<User> existingUser = userRepository.findByName(name);
-        if (existingUser.isPresent()) {
-        	User user = existingUser.get();
-            if (password.equals(user.getPwd())) {
-        		return user;
-        	}
-        };
-		return null;
+        // Find users by the given name
+        List<User> existingUsers = userRepository.findByName(name);
+        
+        // Check if the list is not empty
+        if (existingUsers != null && !existingUsers.isEmpty()) {
+            // Loop through each user in the list
+            for (User user : existingUsers) {
+                // Check if the password matches
+                if (password.equals(user.getPwd())) {
+                    return user; // Return the user on successful login
+                }
+            }
+        }
+        
+        // Return null if no match is found
+        return null;
     }
+
     
     public boolean doesUserExist(String name) {
         Optional<User> existingUser = userRepository.findByName(name);
