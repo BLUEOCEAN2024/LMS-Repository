@@ -17,7 +17,8 @@ function BookList() {
   // const [showUpdateBookSection, setShowUpdateBookSection] = useState(false);
   const [showSearchBookSection, setShowSearchBookSection] = useState(false);
  
-  const user_id = loginUser.user_id;
+  const user_id = loginUser.user_id;  
+  const role = loginUser.role;
 
   useEffect(() => {    
     // console.log("title:"+title);
@@ -97,9 +98,11 @@ function BookList() {
   return (
     <div>
       <h2>Book List</h2>
+      {role === 'LIBRARIAN' && (
       <button onClick={() => setShowAddBookSection(!showAddBookSection)}>
         {showAddBookSection ? 'Hide Add Book' : 'Add a New Book'}
       </button>
+      )}
 
       <button onClick={() => setShowSearchBookSection(!showSearchBookSection)}>
         {showSearchBookSection ? 'Hide Search Book' : 'Search for a Book'}
@@ -120,6 +123,7 @@ function BookList() {
         <BookList user_id = {user_id} books={[searchedBook]} setBooks={setBooks} />
       )} */}
       
+      {role === 'LIBRARIAN' && (
       <table border="1" style={{ width: '100%', borderCollapse: 'collapse'}}>
         <thead>
           <tr>
@@ -167,6 +171,49 @@ function BookList() {
           )}
         </tbody>
       </table>
+      )}
+
+{role === 'MEMBER' && (
+      <table border="1" style={{ width: '100%', borderCollapse: 'collapse'}}>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Genre</th>
+            <th>Year Published</th>
+            <th>Status</th>
+            <th>Borrow</th>         
+            <th>Reserve</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        {books && books.length > 0 ? (
+          books.map(book => (
+            <tr key={book.book_id}>
+              <td align="left" >{book.book_id}</td>
+              <td align="left">{book.title}</td>
+              <td align="left">{book.author}</td>
+              <td align="left">{book.isbn}</td>
+              <td align="left">{book.genre}</td>
+              <td align="center">{book.year_published}</td>
+              <td align="center">{book.status}</td>
+              <td>
+                <button onClick={() => handleBorrowBook(book.book_id, user_id)}>Borrow</button>
+              </td>
+              <td>
+                <button onClick={() => handleReserveBook(book.book_id, user_id)}>Reserve</button>
+              </td>
+            </tr>
+          ))
+          ) : (
+            <tr><td colSpan="6" align="center">No records found</td></tr>
+          )}
+        </tbody>
+      </table>
+      )}
     </div>
   );
 }
