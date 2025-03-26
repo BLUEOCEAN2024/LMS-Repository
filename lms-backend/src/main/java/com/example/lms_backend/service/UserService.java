@@ -106,14 +106,24 @@ public class UserService {
     }
 
     
+//    public boolean doesUserExist(String name) {
+//        Optional<User> existingUser = userRepository.findByName(name);
+//        if (existingUser.isPresent()) {
+//        	return true;
+//        };
+//		return false;
+//    }
+
     public boolean doesUserExist(String name) {
-        Optional<User> existingUser = userRepository.findByName(name);
-        if (existingUser.isPresent()) {
-        	return true;
-        };
+    	// Find users by the given name
+        List<User> existingUsers = userRepository.findByName(name);
+        
+        // Check if the list is not empty
+        if (existingUsers != null && !existingUsers.isEmpty()) {
+                    return true; 
+        }
 		return false;
     }
-    
 
 //    ------------------------------------------------------------------------------------
     
