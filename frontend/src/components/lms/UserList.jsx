@@ -1,6 +1,6 @@
 import { React, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-// import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AddUser from './AddUser';
 import SearchUser from './SearchUser';
 import { AuthContext } from './AuthContext';  // Import AuthProvider
@@ -8,7 +8,7 @@ import { AuthContext } from './AuthContext';  // Import AuthProvider
 // function UserList() {
 function UserList() {  
   const { searchUsers, setSearchUsers, users, setUsers } = useContext(AuthContext);
-  // const navigate = useNavigate();  // This hook allows navigation to another route
+  const navigate = useNavigate();  // This hook allows navigation to another route
   //-------User-----------------------------------------------------------------
   // const [users, setUsers] = useState([]);
   // const [searchedUser, setSearchedUser] = useState(null);
@@ -51,6 +51,7 @@ function UserList() {
     
   const handleUpdateUser = (userId) => {
     // Redirect to the UpdateBook component, passing the user's ID as a URL parameter
+    alert(userId);
     navigate(`/update-user/${userId}`);
   };
 
